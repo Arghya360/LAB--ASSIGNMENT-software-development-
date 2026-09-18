@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Arghya Biswas - Profile Cards</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Hind+Siliguri:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Play:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Viga&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--ink: #171717;
+			--muted: #777;
+			--line: #e6e4e1;
+			--page: #e3e1de;
+			--white: #fff;
+			--blue: #062d66;
+		}
+
+		*, *::before, *::after { box-sizing: border-box; }
+
+		body {
+			min-height: 100vh;
+			margin: 0;
+			padding: 42px 20px;
+			display: grid;
+			place-items: center;
+			background: var(--page);
+			color: var(--ink);
+			font-family: 'Hind Siliguri', Arial, sans-serif;
+		}
+
+		.board {
+			width: min(100%, 1030px);
+			display: grid;
+			grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+			gap: 28px;
+			align-items: start;
+		}
+
+		.card-column { min-width: 0; }
+		.card-label {
+			margin: 0 0 10px 8px;
+			color: #666;
+			font: 700 13px 'Space Mono', monospace;
+			letter-spacing: 1.5px;
+		}
+
+		.card {
+			overflow: hidden;
+			border-radius: 24px;
+			background: var(--white);
+			box-shadow: 0 14px 36px rgba(0, 0, 0, .12);
+		}
+
+		.banner {
+			height: clamp(190px, 22vw, 220px);
+			position: relative;
+			overflow: visible;
+			background: #b9b39e;
+		}
+
+		.banner-img {
+			width: 100%;
+			height: 100%;
+			display: block;
+			object-fit: cover;
+			object-position: center 44%;
+		}
+
+		.avatar {
+			width: 112px;
+			height: 112px;
+			position: absolute;
+			bottom: -54px;
+			left: 28px;
+			z-index: 2;
+			overflow: hidden;
+			border: 5px solid var(--white);
+			border-radius: 50%;
+			background: #ddd;
+			box-shadow: 0 7px 20px rgba(0, 0, 0, .2);
+		}
+
+		.avatar img {
+			width: 100%;
+			height: 100%;
+			display: block;
+			border-radius: 50%;
+			object-fit: cover;
+			object-position: center top;
+		}
+
+		.follow-btn {
+			height: 40px;
+			padding: 0 17px;
+			position: absolute;
+			top: 20px;
+			right: 18px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			border: 0;
+			border-radius: 25px;
+			background: rgba(255, 255, 255, .95);
+			color: var(--ink);
+			font: 600 15px Arial, sans-serif;
+			cursor: pointer;
+		}
+
+		.follow-btn span { font-size: 24px; font-weight: 400; line-height: 1; }
+		.follow-btn:hover { background: #fff; }
+
+		.left-body { padding: 70px 28px 28px; }
+		.name { margin: 0 0 5px; font-family: 'Viga', Arial, sans-serif; font-size: 27px; line-height: 1.15; }
+		.role { margin: 0 0 20px; color: var(--muted); font-size: 15px; line-height: 1.45; }
+
+		.stats {
+			display: flex;
+			justify-content: space-between;
+			padding: 15px 0 18px;
+			border-top: 1px solid var(--line);
+			border-bottom: 1px solid var(--line);
+		}
+
+		.stat { text-align: center; }
+		.stat strong { display: block; font-family: 'Space Mono', monospace; font-size: 20px; }
+		.stat span { color: var(--muted); font-size: 12px; }
+
+		.actions { display: flex; gap: 9px; margin: 20px 0 25px; }
+		.pill {
+			min-width: 0;
+			flex: 1;
+			padding: 10px 8px;
+			border: 1.5px solid var(--ink);
+			border-radius: 999px;
+			background: transparent;
+			color: var(--ink);
+			font: 600 13px 'Play', Arial, sans-serif;
+			cursor: pointer;
+		}
+
+		.pill:hover, .pill.is-following { background: var(--ink); color: #fff; }
+		.about h2 { margin: 0 0 8px; font-size: 15px; }
+		.about p { margin: 0 0 18px; color: #444; font-size: 13px; line-height: 1.65; }
+		.meta { margin: 9px 0; color: var(--muted); font-size: 13px; }
+		.left-bottom { margin-top: 28px; padding-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); }
+
+		.right-card { min-height: 0; padding: 18px; border-radius: 40px; }
+		.right-card .banner { height: 205px; border-radius: 34px; overflow: visible; }
+		.right-card .banner-img { border-radius: 38px; }
+		.right-card .avatar { width: 128px; height: 128px; top: 172px; bottom: auto; left: 18px; }
+		.socials { min-height: 76px; padding: 25px 16px 0; display: flex; justify-content: flex-end; align-items: center; gap: 20px; color: #777; }
+		.social-icon { width: 22px; height: 22px; display: grid; place-items: center; color: inherit; font-size: 20px; font-weight: 600; text-decoration: none; }
+		.instagram { position: relative; border: 2px solid currentColor; border-radius: 5px; }
+		.instagram::before { width: 7px; height: 7px; content: ""; position: absolute; top: 5px; left: 5px; border: 1.5px solid currentColor; border-radius: 50%; }
+		.instagram::after { width: 3px; height: 3px; content: ""; position: absolute; top: 2px; right: 2px; border-radius: 50%; background: currentColor; }
+		.linkedin { width: 20px; height: 20px; border: 2px solid currentColor; border-radius: 2px; font-size: 14px; }
+		.right-info { margin: 20px 16px 0; }
+		.right-info .name { font-size: 28px; }
+		.bio { max-width: 350px; margin: 10px 0 0; color: #858585; font-size: 18px; line-height: 1.3; }
+		.right-actions { margin: 17px 16px 0; }
+		.right-about { margin: 22px 16px 0; }
+		.right-about h3 { margin: 0 0 8px; font-size: 16px; }
+		.right-about p { margin: 0 0 18px; color: #444; font-size: 13px; line-height: 1.65; }
+		.right-about .meta { margin: 9px 0; color: var(--muted); font-size: 13px; }
+		.right-stats { min-height: 108px; margin: 22px 8px 0; padding: 14px 10px; display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; border-radius: 54px; background: #f2f2f2; }
+		.right-stats .stat-number { font-family: 'Space Mono', monospace; font-size: 25px; font-weight: 700; text-align: center; }
+		.right-stats .stat-label { margin-top: 9px; color: #a1a1a1; font-size: 13px; text-align: center; }
+		.right-bottom { margin: 25px 5px 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+		.clients { color: #777; font-size: 15px; }
+		.hire-btn { height: 48px; min-width: 120px; padding: 0 18px; border: 0; border-radius: 25px; background: var(--blue); color: #fff; font: 600 16px 'Play', Arial, sans-serif; cursor: pointer; }
+
+		@media (max-width: 760px) {
+			body { padding: 24px 15px; }
+			.board { grid-template-columns: 1fr; max-width: 520px; }
+			.card-label { margin-top: 6px; }
+			.right-card { min-height: 0; }
+		}
+
+		@media (max-width: 390px) {
+			.right-card { padding: 15px; border-radius: 32px; }
+			.right-card .banner { border-radius: 27px; }
+			.right-card .avatar { left: 20px; }
+			.right-info { margin-inline: 10px; }
+			.right-stats .stat-number { font-size: 19px; }
+			.right-stats .stat-label { font-size: 10px; }
+			.clients { font-size: 13px; }
+			.hire-btn { min-width: 105px; font-size: 14px; }
+		}
+	</style>
+</head>
+<body>
+	<main class="board">
+		<section class="card-column">
+			<p class="card-label">BEFORE</p>
+			<article class="card left-card">
+			<div class="banner">
+				<img class="banner-img" src="asset/background.jpeg" alt="Arghya Biswas cover photo">
+				<div class="avatar"><img src="asset/profile picture.jpeg" alt="Arghya Biswas"></div>
+			</div>
+			<div class="left-body">
+				<h1 class="name">ARGHYA BISWAS</h1>
+				<p class="role">Fullstack Developer | CSE Student | NUBTK</p>
+				<div class="stats">
+					<div class="stat"><strong>128</strong><span>Projects</span></div>
+					<div class="stat"><strong>4.2k</strong><span>Commits</span></div>
+					<div class="stat"><strong>1.1k</strong><span>Followers</span></div>
+					<div class="stat"><strong>340</strong><span>Following</span></div>
+				</div>
+				<div class="actions">
+					<button class="pill follow-toggle" type="button" aria-pressed="false">+ Follow</button>
+					<button class="pill" type="button">Message</button>
+					<button class="pill" type="button">Email</button>
+				</div>
+				<div class="about">
+					<h2>About</h2>
+					<p>Passionate Fullstack Developer and CSE student at NUBTK with a strong foundation in front-end and back-end technologies. I love crafting seamless, user-friendly web experiences and scalable server-side solutions.</p>
+					<div class="meta">SYLHET, BANGLADESH</div>
+					<div class="meta">Dept. of Computer Science &amp; Engineering</div>
+					<div class="meta">github.com/arghyabiswas</div>
+				</div>
+				<div class="left-bottom">
+					<div class="clients">170+ Clients happy</div>
+					<button class="hire-btn" type="button">Hire now</button>
+				</div>
+			</div>
+			</article>
+		</section>
+
+		<section class="card-column">
+			<p class="card-label">AFTER</p>
+			<article class="card right-card">
+			<div class="banner">
+				<img class="banner-img" src="asset/background.jpeg" alt="Arghya Biswas cover photo">
+				<button class="follow-btn follow-toggle" type="button" aria-pressed="false"><span>+</span><b>Follow</b></button>
+				<div class="avatar"><img src="asset/profile picture.jpeg" alt="Arghya Biswas"></div>
+			</div>
+			<nav class="socials" aria-label="Social links">
+				<a class="social-icon instagram" href="#" aria-label="Instagram"></a>
+				<a class="social-icon" href="#" aria-label="X">X</a>
+				<a class="social-icon linkedin" href="#" aria-label="LinkedIn">in</a>
+			</nav>
+			<div class="right-info">
+				<h2 class="name">ARGHYA BISWAS</h2>
+				<p class="bio">Fullstack Developer | CSE Student | NUBTK</p>
+			</div>
+			<div class="actions right-actions">
+				<button class="pill follow-toggle" type="button" aria-pressed="false">+ Follow</button>
+				<button class="pill" type="button">Message</button>
+				<button class="pill" type="button">Email</button>
+			</div>
+			<div class="right-about">
+				<h3>About</h3>
+				<p>Passionate Fullstack Developer and CSE student at NUBTK with a strong foundation in front-end and back-end technologies. I love crafting seamless, user-friendly web experiences and scalable server-side solutions.</p>
+				<div class="meta">SYLHET, BANGLADESH</div>
+				<div class="meta">Dept. of Computer Science &amp; Engineering</div>
+				<div class="meta">github.com/arghyabiswas</div>
+			</div>
+			<div class="right-stats">
+				<div><div class="stat-number">128</div><div class="stat-label">Projects</div></div>
+				<div><div class="stat-number">4.2k</div><div class="stat-label">Commits</div></div>
+				<div><div class="stat-number">1.1k</div><div class="stat-label">Followers</div></div>
+				<div><div class="stat-number">340</div><div class="stat-label">Following</div></div>
+			</div>
+			<div class="right-bottom"><div class="clients">170+ Clients happy</div><button class="hire-btn" type="button">Hire now</button></div>
+			</article>
+		</section>
+	</main>
+
+	<script>
+		document.querySelectorAll('.follow-toggle').forEach(function (button) {
+			button.addEventListener('click', function () {
+				var active = this.getAttribute('aria-pressed') === 'true';
+				this.setAttribute('aria-pressed', String(!active));
+				this.classList.toggle('is-following', !active);
+				this.innerHTML = this.classList.contains('is-following') ? '✓ Following' : '+ Follow';
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Navigation Bar</title>
+<style>
+  :root{
+    --navy:#0b0f1c;
+    --navy-2:#0f1424;
+    --blue:#3b5bfd;
+    --text:#0e1220;
+    --grey:#8a8f9c;
+    --line:rgba(255,255,255,.08);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    font-family:"Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color:var(--text);
+    background:#fafafa;
+  }
+
+  a{ text-decoration:none; }
+
+  /* ---------------- NAVBAR ---------------- */
+  .navbar{
+    background:var(--navy);
+    position:sticky;
+    top:0;
+    z-index:50;
+  }
+
+  .nav-inner{
+    max-width:1240px;
+    margin:0 auto;
+    padding:14px 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
+  }
+
+  .avatar-sm{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:var(--blue);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .avatar-sm svg{ width:20px; height:20px; }
+
+  .brand-name{
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+  }
+
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .nav-links a{
+    color:#c9cbd6;
+    font-size:14px;
+    font-weight:600;
+    padding:8px 16px;
+    border-radius:8px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-links a:hover{ color:#fff; background:rgba(255,255,255,.06); }
+  .nav-links a.active{ color:#fff; background:var(--blue); }
+
+  .nav-social{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
+  }
+
+  .nav-social a{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:rgba(255,255,255,.06);
+    color:#c9cbd6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:700;
+    transition:background .15s ease, color .15s ease, transform .15s ease;
+  }
+  .nav-social a:hover{ background:var(--blue); color:#fff; transform:translateY(-2px); }
+  .nav-social svg{ width:15px; height:15px; }
+
+  /* hamburger — hidden on desktop */
+  .hamburger{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    width:38px;
+    height:38px;
+    border-radius:8px;
+    border:none;
+    background:rgba(255,255,255,.06);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .hamburger span{
+    display:block;
+    width:18px;
+    height:2px;
+    margin:0 auto;
+    background:#fff;
+    border-radius:2px;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .hamburger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2){ opacity:0; }
+  .hamburger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  /* ---------------- HERO ---------------- */
+  .hero{
+    max-width:1240px;
+    margin:0 auto;
+    padding:90px 32px 120px;
+  }
+
+  .hero h1{
+    margin:0;
+    font-family:"Arial Black", "Archivo Black", Impact, sans-serif;
+    font-weight:900;
+    font-size:clamp(40px, 7vw, 76px);
+    line-height:1.02;
+    letter-spacing:-1px;
+    text-transform:uppercase;
+    color:var(--text);
+  }
+  .hero h1 .accent{ color:var(--blue); }
+
+  /* ---------------- MOBILE MENU PANEL ---------------- */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:60;
+  }
+  .overlay.open{ opacity:1; pointer-events:auto; }
+
+  .mobile-panel{
+    position:fixed;
+    top:0;
+    right:0;
+    height:100%;
+    width:280px;
+    max-width:82vw;
+    background:var(--navy-2);
+    box-shadow:-10px 0 30px rgba(0,0,0,.3);
+    transform:translateX(100%);
+    transition:transform .3s ease;
+    z-index:70;
+    display:flex;
+    flex-direction:column;
+    padding:24px 22px;
+  }
+  .mobile-panel.open{ transform:translateX(0); }
+
+  .close-btn{
+    align-self:flex-end;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    font-size:16px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .15s ease;
+  }
+  .close-btn:hover{ background:var(--blue); }
+
+  .panel-profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:18px 4px 22px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:18px;
+  }
+
+  .avatar-lg{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--blue);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .avatar-lg svg{ width:24px; height:24px; }
+
+  .panel-name{ color:#fff; font-size:15px; font-weight:700; }
+  .panel-role{ color:var(--grey); font-size:13px; margin-top:2px; }
+
+  .panel-links{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    flex:1;
+  }
+  .panel-links a{
+    color:#c9cbd6;
+    font-size:14px;
+    font-weight:600;
+    padding:10px 10px;
+    border-radius:8px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .panel-links a:hover{ background:rgba(255,255,255,.06); color:#fff; }
+  .panel-links a.active{ color:var(--blue); }
+
+  .panel-social{
+    display:flex;
+    gap:10px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+  }
+  .panel-social a{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:rgba(255,255,255,.06);
+    color:#c9cbd6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:700;
+    transition:background .15s ease, color .15s ease;
+  }
+  .panel-social a:hover{ background:var(--blue); color:#fff; }
+  .panel-social svg{ width:14px; height:14px; }
+
+  /* ---------------- RESPONSIVE ---------------- */
+  @media (max-width:860px){
+    .nav-links,
+    .nav-social{ display:none; }
+    .hamburger{ display:flex; }
+  }
+
+  @media (max-width:480px){
+    .nav-inner{ padding:12px 18px; }
+    .hero{ padding:60px 18px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="avatar-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <span class="brand-name">Arghya Biswas</span>
+    </div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#" class="active">Home</a>
+      <a href="#">About</a>
+      <a href="#">Skills</a>
+      <a href="#">Portfolio</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <div class="nav-social">
+      <a href="#" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="8" y1="10" x2="8" y2="16"/><circle cx="8" cy="7" r="1" fill="currentColor" stroke="none"/><path d="M12 16v-4a2 2 0 0 1 4 0v4"/><line x1="12" y1="10" x2="12" y2="16"/></svg>
+      </a>
+      <a href="#" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+      </a>
+      <a href="#" aria-label="Behance">Be</a>
+    </div>
+
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main class="hero">
+  <h1>
+    RESPONSIVE<br>
+    <span class="accent">NAVIGATION</span><br>
+    BAR
+  </h1>
+</main>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="mobile-panel" id="mobilePanel">
+  <button class="close-btn" id="closeBtn" aria-label="Close menu">&times;</button>
+
+  <div class="panel-profile">
+    <div class="avatar-lg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </div>
+    <div>
+      <div class="panel-name">Jhon Doe</div>
+      <div class="panel-role">Web designer</div>
+    </div>
+  </div>
+
+  <nav class="panel-links">
+    <a href="#" class="active">Home</a>
+    <a href="#">About</a>
+    <a href="#">Skills</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="panel-social">
+    <a href="#" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="8" y1="10" x2="8" y2="16"/><circle cx="8" cy="7" r="1" fill="currentColor" stroke="none"/><path d="M12 16v-4a2 2 0 0 1 4 0v4"/><line x1="12" y1="10" x2="12" y2="16"/></svg>
+    </a>
+    <a href="#" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+    </a>
+    <a href="#" aria-label="Behance">Be</a>
+  </div>
+</aside>
+
+<script>
+  var hamburger = document.getElementById('hamburgerBtn');
+  var panel = document.getElementById('mobilePanel');
+  var overlay = document.getElementById('overlay');
+  var closeBtn = document.getElementById('closeBtn');
+
+  function openMenu(){
+    panel.classList.add('open');
+    overlay.classList.add('open');
+    hamburger.classList.add('open');
+  }
+  function closeMenu(){
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
+    hamburger.classList.remove('open');
+  }
+
+  hamburger.addEventListener('click', function(){
+    panel.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  closeBtn.addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+
+  // clicking a link inside the mobile panel sets it active and closes the menu
+  document.querySelectorAll('.panel-links a, .nav-links a').forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var group = link.closest('.panel-links') || link.closest('.nav-links');
+      group.querySelectorAll('a').forEach(function(a){ a.classList.remove('active'); });
+      link.classList.add('active');
+      // keep both nav sets in sync
+      var idx = Array.prototype.indexOf.call(group.children, link);
+      [document.querySelectorAll('.nav-links a'), document.querySelectorAll('.panel-links a')].forEach(function(list){
+        list.forEach(function(a, i){ a.classList.toggle('active', i === idx); });
+      });
+      closeMenu();
+    });
+  });
+
+  // close menu automatically if resized back to desktop width
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 860) closeMenu();
+  });
+</script>
+
+</body>
+</html>

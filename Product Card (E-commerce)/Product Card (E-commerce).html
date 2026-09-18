@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Details</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#fff;
+  color:#111;
+}
+
+.product-page{
+  max-width:1200px;
+  margin:15px auto;
+  padding:0 22px;
+  display:grid;
+  grid-template-columns:50% 50%;
+  gap:38px;
+}
+
+/* LEFT */
+.gallery{
+  width:100%;
+}
+
+.main-image{
+  height:570px;
+  background:#f4f1ef;
+  border-radius:5px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.main-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.zoom{
+  position:absolute;
+  top:16px;
+  right:16px;
+  width:38px;
+  height:38px;
+  background:white;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:23px;
+  box-shadow:0 2px 8px #aaa;
+  cursor:pointer;
+}
+
+.thumbnails{
+  display:flex;
+  gap:14px;
+  margin-top:14px;
+}
+
+.thumb{
+  width:132px;
+  height:132px;
+  border:1px solid #ddd;
+  border-radius:6px;
+  padding:4px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.thumb:hover{
+  border-color:#078b4d;
+  transform:translateY(-2px);
+}
+
+.thumb.active{
+  border:1.5px solid #078b4d;
+}
+
+.thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:4px;
+}
+
+/* RIGHT */
+.details{
+  padding-top:10px;
+}
+
+.stock{
+  display:inline-block;
+  color:#078b4d;
+  background:#f3faf5;
+  border:1px solid #e1eee5;
+  padding:5px 13px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.title{
+  font-size:29px;
+  line-height:1.15;
+  margin-bottom:18px;
+  font-weight:700;
+}
+
+.description{
+  font-size:16px;
+  line-height:1.55;
+  margin-bottom:18px;
+}
+
+.price{
+  color:#07904c;
+  font-size:25px;
+  font-weight:bold;
+  margin-bottom:36px;
+}
+
+.pack-title{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:11px;
+}
+
+.pack-options{
+  display:flex;
+  gap:9px;
+  margin-bottom:28px;
+}
+
+.pack{
+  min-width:76px;
+  height:45px;
+  border:1px solid #ccc;
+  background:#fff;
+  border-radius:3px;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.pack.active{
+  background:#078b4d;
+  border-color:#078b4d;
+  color:white;
+  font-weight:bold;
+}
+
+/* CART */
+.cart-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:20px;
+}
+
+.quantity{
+  width:146px;
+  height:54px;
+  display:flex;
+  border:1px solid #ccc;
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.quantity button{
+  border-radius:10px;
+  width:42px;
+  border:0;
+  background:white;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.quantity span{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-left:1px solid #ddd;
+  border-right:1px solid #ddd;
+  font-size:18px;
+}
+
+.add-cart,
+.buy-now{
+  height:54px;
+  border:0;
+  border-radius:4px;
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.add-cart{
+  flex:1;
+  background:#078b4d;
+}
+
+.buy-now{
+  flex:1;
+  background:#00532e;
+}
+
+.add-cart:hover{
+  background:#006f3c;
+  box-shadow:0 5px 15px rgba(0,120,70,.2);
+}
+
+.buy-now:hover{
+  background:#003d22;
+  box-shadow:0 5px 15px rgba(0,80,40,.2);
+}
+
+/* CONTACT */
+.contact-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:25px;
+}
+
+.contact{
+  height:62px;
+  border:1px solid #bbb;
+  border-radius:4px;
+  display:flex;
+  align-items:center;
+  padding:8px 14px;
+  gap:12px;
+}
+
+.contact-icon{
+  width:31px;
+  height:31px;
+  border-radius:4px;
+  background:#078b4d;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+}
+
+.contact strong{
+  font-size:15px;
+}
+
+.contact small{
+  display:block;
+  color:#666;
+  margin-top:3px;
+  font-size:12px;
+}
+
+/* FEATURES */
+.features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  text-align:center;
+}
+
+.feature-icon{
+  width:43px;
+  height:43px;
+  margin:0 auto 7px;
+  background:#f1fbf3;
+  color:#078b4d;
+  border-radius:5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+}
+
+.feature h4{
+  font-size:14px;
+  margin-bottom:5px;
+}
+
+.feature p{
+  color:#777;
+  font-size:12px;
+  line-height:1.4;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .product-page{
+    grid-template-columns:1fr;
+    gap:25px;
+  }
+
+  .main-image{
+    height:500px;
+  }
+}
+
+@media(max-width:600px){
+  .product-page{
+    padding:0 12px;
+  }
+
+  .main-image{
+    height:400px;
+  }
+
+  .title{
+    font-size:25px;
+  }
+
+  .cart-row{
+    flex-wrap:wrap;
+  }
+
+  .quantity{
+    width:100%;
+  }
+
+  .add-cart,
+  .buy-now{
+    width:100%;
+    flex:auto;
+  }
+
+  .contact-row{
+    grid-template-columns:1fr;
+  }
+
+  .features{
+    gap:5px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="product-page">
+
+  <!-- LEFT PRODUCT IMAGE -->
+  <div class="gallery">
+
+    <div class="main-image">
+      <img id="mainProduct"
+      src="asset/Natural-Brown-Sugar-Premium-Unrefined-Sweetener-600x600.png"
+      alt="Natural Brown Sugar">
+
+      <div class="zoom">⌕</div>
+    </div>
+
+    <div class="thumbnails">
+
+      <div class="thumb active" onclick="changeImage(this)">
+        <img src="asset/Natural-Brown-Sugar-Premium-Unrefined-Sweetener-600x600.png" alt="Natural Brown Sugar">
+      </div>
+
+      <div class="thumb" onclick="changeImage(this)">
+        <img src="asset/Natural-Brown-Sugar-Premium-Unrefined-Sweetener-600x600.png" alt="Natural Brown Sugar"> 
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- RIGHT PRODUCT DETAILS -->
+  <div class="details">
+
+    <span class="stock">In Stock</span>
+
+    <h1 class="title">
+      Natural Brown Sugar Premium Unrefined Sweetener
+    </h1>
+
+    <p class="description">
+      Natural Brown Sugar Premium Unrefined Sweetener দাঁদার তৈরিকার,
+      মোলাসেসের হালকা স্বাদ ও নরম মিষ্টতার জন্য চা, কফি, বেকিং,
+      পায়েস ও ডেজার্টে মানায়। ঘরোয়া পানীয় ও মিষ্টিতে ব্যবহার সহজ।
+    </p>
+
+    <div class="price">190৳</div>
+
+    <div class="pack-title">Pack Size</div>
+
+    <div class="pack-options">
+      <button class="pack active">500g</button>
+      <button class="pack">1kg</button>
+    </div>
+
+
+    <!-- QUANTITY + BUTTONS -->
+    <div class="cart-row">
+
+      <div class="quantity">
+        <button onclick="decrease()">−</button>
+        <span id="quantity">1</span>
+        <button onclick="increase()">+</button>
+      </div>
+
+      <button class="add-cart">
+        ADD TO CART
+      </button>
+
+      <button class="buy-now">
+        BUY NOW
+      </button>
+
+    </div>
+
+
+    <!-- CONTACT -->
+    <div class="contact-row">
+
+      <div class="contact">
+        <div class="contact-icon">☎</div>
+        <div>
+          <strong>+8809613821111</strong>
+          <small>Call for Order</small>
+        </div>
+      </div>
+
+      <div class="contact">
+        <div class="contact-icon">◉</div>
+        <div>
+          <strong>Order Via WhatsApp</strong>
+          <small>Chat with us</small>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- FEATURES -->
+    <div class="features">
+
+      <div class="feature">
+        <div class="feature-icon">🚚</div>
+        <h4>Fast Delivery</h4>
+        <p>৪৮-৭২ ঘণ্টার মধ্যে দ্রুত ডেলিভারি</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">💵</div>
+        <h4>Cash on Delivery</h4>
+        <p>পণ্য হাতে পেয়ে পেমেন্ট করুন</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">🛡</div>
+        <h4>Quality Guarantee</h4>
+        <p>স্বাদ ও মানের নিশ্চয়তা</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+let quantity = 1;
+
+function increase(){
+  quantity++;
+  document.getElementById("quantity").innerText = quantity;
+}
+
+function decrease(){
+  if(quantity > 1){
+    quantity--;
+    document.getElementById("quantity").innerText = quantity;
+  }
+}
+
+function changeImage(element){
+  let image = element.querySelector("img").src;
+
+  document.getElementById("mainProduct").src = image;
+
+  document.querySelectorAll(".thumb").forEach(function(item){
+    item.classList.remove("active");
+  });
+
+  element.classList.add("active");
+}
+
+
+/* Pack Size */
+document.querySelectorAll(".pack").forEach(function(button){
+  button.addEventListener("click",function(){
+
+    document.querySelectorAll(".pack").forEach(function(item){
+      item.classList.remove("active");
+    });
+
+    this.classList.add("active");
+  });
+});
+
+
+/* Button Demo */
+document.querySelector(".add-cart").onclick = function(){
+  alert("Product added to cart!");
+};
+
+document.querySelector(".buy-now").onclick = function(){
+  alert("Proceeding to checkout!");
+};
+</script>
+
+</body>
+</html>
